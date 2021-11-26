@@ -40,46 +40,8 @@ class AmbilController extends Controller
             return $response;
         }
     }
-    public function indexsuhu() //deklarasi index suhu (menampilkan seluruh data suhu)
-    {
 
-        $currentDate = strval(gmdate("Y-m-d"));
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 30000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                // Set Here Your Requesred Headers
-                'Content-Type: application/json',
-            ),
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            $response = json_decode($response, true);
-
-            $field1 = array();
-            foreach ($response['feeds'] as $responses) {
-                $field1[] = $responses['field1'];
-            }
-        }
-
-        $data['status'] = true; //menampilkan status
-        $data['message'] = "Data Suhu ThingSpeak"; //menampilkan pesan
-        $data['data'] = $field1;
-        return $data;
-    }
-
-    public function indexsaturasi() //deklarasi index saturasi (menampilkan seluruh data satu rasi oksigen)
+    public function suhu() //deklarasi function suhu (get suhu max, min, avg, grafik)
     {
         $currentDate = strval(gmdate("Y-m-d"));
         $curl = curl_init();
@@ -93,205 +55,6 @@ class AmbilController extends Controller
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
                 //set here your requesred headers
-                'Content-Type: application/json',
-            ),
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            $response = json_decode($response, true);
-
-            $array_saturasi = array();
-            $field2 = array();
-            foreach ($response['feeds'] as $response) {
-                $array_saturasi[] = $response['field2'];
-                $field2[] = $response['field2'];
-            }
-        }
-        $data['status'] = true; //menampilkan status
-        $data['message'] = "Data Saturasi Oksigen ThingSpeak"; //menampilkan pesan
-        $data['data'] = $field2;
-        return $data;
-    }
-
-    public function getmaxsuhu() //deklarasi function mencari nilai saturasi oksigen tertinggi
-    {
-        $currentDate = strval(gmdate("Y-m-d"));
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 3000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                //set here your requesred headers
-                'Content-Type: application/json',
-            ),
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            $response = json_decode($response, true);
-
-            $array_suhu = array();
-            $field1 = array();
-            foreach ($response['feeds'] as $response) {
-                $array_suhu[] = $response['field1'];
-                $field1[] = $response['field1'];
-                $max = max($field1); //mencari value tertinggi
-            }
-        }
-        $data['status'] = true; //menampilkan status
-        $data['message'] = "Suhu Tertinggi"; //menampilkan pesan
-        $data['data'] = $max;
-        return $data;
-    }
-
-    public function getminsuhu() //deklarasi function mencari nilai suhu terendah
-    {
-        $currentDate = strval(gmdate("Y-m-d"));
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 3000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                //set here your requesred headers
-                'Content-Type: application/json',
-            ),
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            $response = json_decode($response, true);
-
-            $array_suhu = array();
-            $field1 = array();
-            foreach ($response['feeds'] as $response) {
-                $array_suhu[] = $response['field1'];
-                $field1[] = $response['field1'];
-                $min = min($field1); //mencari value terendah
-            }
-        }
-        $data['status'] = true; //menampilkan status
-        $data['message'] = "Suhu Terendah"; //menampilkan pesan
-        $data['data'] = $min;
-        return $data;
-    }
-
-    public function getmaxsaturasi() //deklarasi function mencari nilai saturasi oksigen tertinggi
-    {
-        $currentDate = strval(gmdate("Y-m-d"));
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 3000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                //set here your requesred headers
-                'Content-Type: application/json',
-            ),
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            $response = json_decode($response, true);
-
-            $array_saturasi = array();
-            $field2 = array();
-            foreach ($response['feeds'] as $response) {
-                $array_saturasi[] = $response['field2'];
-                $field2[] = $response['field2'];
-                $max = max($field2); //mencari value tertinggi
-            }
-        }
-        $data['status'] = true; //menampilkan status
-        $data['message'] = "Saturasi Oksigen Tertinggi"; //menampilkan pesan
-        $data['data'] = $max;
-        return $data;
-    }
-
-    public function getminsaturasi() //deklarasi function mencari nilai saturasi oksigen terendah
-    {
-        $currentDate = strval(gmdate("Y-m-d"));
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 3000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                //set here your requesred headers
-                'Content-Type: application/json',
-            ),
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            $response = json_decode($response, true);
-
-            $array_saturasi = array();
-            $field2 = array();
-            foreach ($response['feeds'] as $response) {
-                $array_saturasi[] = $response['field2'];
-                $field2[] = $response['field2'];
-                $min = min($field2); //mencari value terendah
-            }
-        }
-        $data['status'] = true; //menampilkan status
-        $data['message'] = "Saturasi Oksigen Terendah"; //menampilkan pesan
-        $data['data'] = $min;
-        return $data;
-    }
-
-    public function meansuhu() //deklarasi function menghitung rata-rata suhu
-    {
-        $currentDate = strval(gmdate("Y-m-d"));
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 30000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                // Set Here Your Requesred Headers
                 'Content-Type: application/json',
             ),
         ));
@@ -307,20 +70,29 @@ class AmbilController extends Controller
             $array_tanggal = array();
             $field1 = array();
             foreach ($response['feeds'] as $responses) {
+                $originalDate = $responses['created_at']; //mengambil data tanggal dari creted_at
+                $newDate = date("H:i:s", strtotime($originalDate)); //mengubah tangga
+                array_push($array_tanggal, $newDate);
+
                 $field1[] = $responses['field1'];
+                $max = max($field1); //mencari value tertinggi
+                $min = min($field1); //mencari value terendah
                 $sum = array_sum($field1); //menjumlahkan value datanya
                 $count = count($field1); //menjumlahkan datanya
                 $avg = $sum / $count; //fungsi average(rata-rata)
             }
         }
-
         $data['status'] = true; //menampilkan status
-        $data['message'] = "Data Rata-Rata Suhu"; //menampilkan pesan
-        $data['data'] = round($avg, 2);
+        $data['message'] = "Data Suhu"; //menampilkan pesan
+        $data['data_tertinggi'] = $max;
+        $data['data_terendah'] = $min;
+        $data['data_rata-rata'] = $avg;
+        $data['x'] = $array_tanggal;
+        $data['y'] = $field1;
         return $data;
     }
 
-    public function meansaturasi() //deklarasi function menghitung rata-rata saturasi oksigen
+    public function saturasi() //deklarasi function suhu (get suhu max, min, avg, grafik)
     {
         $currentDate = strval(gmdate("Y-m-d"));
         $curl = curl_init();
@@ -329,11 +101,11 @@ class AmbilController extends Controller
             CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 30000,
+            CURLOPT_TIMEOUT => 3000,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
-                // Set Here Your Requesred Headers
+                //set here your requesred headers
                 'Content-Type: application/json',
             ),
         ));
@@ -349,16 +121,25 @@ class AmbilController extends Controller
             $array_tanggal = array();
             $field2 = array();
             foreach ($response['feeds'] as $responses) {
+                $originalDate = $responses['created_at']; //mengambil data tanggal dari creted_at
+                $newDate = date("H:i:s", strtotime($originalDate)); //mengubah tangga
+                array_push($array_tanggal, $newDate);
+
                 $field2[] = $responses['field2'];
+                $max = max($field2); //mencari value tertinggi
+                $min = min($field2); //mencari value terendah
                 $sum = array_sum($field2); //menjumlahkan value datanya
                 $count = count($field2); //menjumlahkan datanya
-                $avg = $sum / $count; //fungsi average(rata-rata) 
+                $avg = $sum / $count; //fungsi average(rata-rata)
             }
         }
-
         $data['status'] = true; //menampilkan status
-        $data['message'] = "Data Rata-Rata Satu Rasi Oksigen"; //menampilkan pesan
-        $data['data'] = round($avg, 2);
+        $data['message'] = "Data Suhu"; //menampilkan pesan
+        $data['data_tertinggi'] = $max;
+        $data['data_terendah'] = $min;
+        $data['data_rata-rata'] = $avg;
+        $data['x'] = $array_tanggal;
+        $data['y'] = $field2;
         return $data;
     }
 
@@ -519,98 +300,6 @@ class AmbilController extends Controller
         return $data;
     }
 
-    public function grafiksuhu() //deklarasi index suhu (menampilkan seluruh data suhu)
-    {
-
-        $currentDate = strval(gmdate("Y-m-d"));
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 30000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                // Set Here Your Requesred Headers
-                'Content-Type: application/json',
-            ),
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            $response = json_decode($response, true);
-
-            $array_tanggal = array();
-            $field1 = array();
-            foreach ($response['feeds'] as $responses) {
-                $originalDate = $responses['created_at'];
-                $newDate = date("H:i:s", strtotime($originalDate));
-                //$array_waktu = DateTime::createFromFormat($responses['created_at']);
-                array_push($array_tanggal, $newDate);
-                $field1[] = $responses['field1'];
-            }
-        }
-
-        $data['status'] = true; //menampilkan status
-        $data['message'] = "Data Suhu ThingSpeak"; //menampilkan pesan
-        $data['x'] = $array_tanggal;
-        $data['y'] = $field1;
-        return $data;
-    }
-
-    public function grafiksaturasi() //deklarasi index saturasi (menampilkan seluruh data suhu)
-    {
-
-        $currentDate = strval(gmdate("Y-m-d"));
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 30000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                // Set Here Your Requesred Headers
-                'Content-Type: application/json',
-            ),
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            $response = json_decode($response, true);
-
-            $array_tanggal = array();
-            $field2 = array();
-            foreach ($response['feeds'] as $responses) {
-                $originalDate = $responses['created_at'];
-                $newDate = date("H:i:s", strtotime($originalDate));
-                //$array_waktu = DateTime::createFromFormat($responses['created_at']);
-                array_push($array_tanggal, $newDate);
-                $field2[] = $responses['field2'];
-            }
-        }
-
-        $data['status'] = true; //menampilkan status
-        $data['message'] = "Data Saturasi Oksigen ThingSpeak"; //menampilkan pesan
-        $data['x'] = $array_tanggal;
-        $data['y'] = $field2;
-        return $data;
-    }
-
     public function grafikpengunjung() //deklarasi index pengunjung(menampilkan seluruh data pengunjung)
     {
 
@@ -651,7 +340,7 @@ class AmbilController extends Controller
         }
 
         $data['status'] = true; //menampilkan status
-        $data['message'] = "Data Saturasi Oksigen ThingSpeak"; //menampilkan pesan
+        $data['message'] = "Data Pengunjung"; //menampilkan pesan
         $data['x'] = $array_tanggal;
         $data['y'] = $field4;
         return $data;
