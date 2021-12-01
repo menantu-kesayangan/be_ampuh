@@ -71,7 +71,7 @@ class AmbilController extends Controller
             $field1 = array();
             foreach ($response['feeds'] as $responses) {
                 $originalDate = $responses['created_at']; //mengambil data tanggal dari creted_at
-                $newDate = date("H:i:s", strtotime($originalDate)); //mengubah tangga
+                $newDate = date("H", strtotime($originalDate)); //mengubah tangga
                 array_push($array_tanggal, $newDate);
 
                 $field1[] = $responses['field1'];
@@ -86,7 +86,7 @@ class AmbilController extends Controller
         $data['message'] = "Data Suhu"; //menampilkan pesan
         $data['data_tertinggi'] = $max;
         $data['data_terendah'] = $min;
-        $data['data_rata-rata'] = $avg;
+        $data['data_rata'] = $avg;
         $data['x'] = $array_tanggal;
         $data['y'] = $field1;
         return $data;
@@ -122,7 +122,7 @@ class AmbilController extends Controller
             $field2 = array();
             foreach ($response['feeds'] as $responses) {
                 $originalDate = $responses['created_at']; //mengambil data tanggal dari creted_at
-                $newDate = date("H:i:s", strtotime($originalDate)); //mengubah tangga
+                $newDate = date("H", strtotime($originalDate)); //mengubah tangga
                 array_push($array_tanggal, $newDate);
 
                 $field2[] = $responses['field2'];
@@ -137,7 +137,7 @@ class AmbilController extends Controller
         $data['message'] = "Data Suhu"; //menampilkan pesan
         $data['data_tertinggi'] = $max;
         $data['data_terendah'] = $min;
-        $data['data_rata-rata'] = $avg;
+        $data['data_rata'] = $avg;
         $data['x'] = $array_tanggal;
         $data['y'] = $field2;
         return $data;
@@ -332,7 +332,7 @@ class AmbilController extends Controller
             $field4 = array();
             foreach ($response['feeds'] as $responses) {
                 $originalDate = $responses['created_at'];
-                $newDate = date("H:i:s", strtotime($originalDate));
+                $newDate = date("H", strtotime($originalDate));
                 //$array_waktu = DateTime::createFromFormat($responses['created_at']);
                 array_push($array_tanggal, $newDate);
                 $field4[] = $responses['field4'];
