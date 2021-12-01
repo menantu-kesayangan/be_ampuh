@@ -86,7 +86,7 @@ class AmbilController extends Controller
         $data['message'] = "Data Suhu"; //menampilkan pesan
         $data['data_tertinggi'] = $max;
         $data['data_terendah'] = $min;
-        $data['data_rata-rata'] = $avg;
+        $data['data_rata'] = $avg;
         $data['x'] = $array_tanggal;
         $data['y'] = $field1;
         return $data;
@@ -137,7 +137,7 @@ class AmbilController extends Controller
         $data['message'] = "Data Suhu"; //menampilkan pesan
         $data['data_tertinggi'] = $max;
         $data['data_terendah'] = $min;
-        $data['data_rata-rata'] = $avg;
+        $data['data_rata'] = $avg;
         $data['x'] = $array_tanggal;
         $data['y'] = $field2;
         return $data;
