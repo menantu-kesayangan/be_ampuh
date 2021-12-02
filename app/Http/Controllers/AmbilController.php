@@ -47,7 +47,7 @@ class AmbilController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
+            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+07:00",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_TIMEOUT => 3000,
@@ -71,7 +71,7 @@ class AmbilController extends Controller
             $field1 = array();
             foreach ($response['feeds'] as $responses) {
                 $originalDate = $responses['created_at']; //mengambil data tanggal dari creted_at
-                $newDate = date("H:i", strtotime($originalDate)); //mengubah tangga
+                $newDate = date("H:i", strtotime($originalDate) + 60 * 60 * 7); //mengubah tanggal
                 array_push($array_tanggal, $newDate);
 
                 $field1[] = $responses['field1'];
@@ -122,7 +122,7 @@ class AmbilController extends Controller
             $field2 = array();
             foreach ($response['feeds'] as $responses) {
                 $originalDate = $responses['created_at']; //mengambil data tanggal dari creted_at
-                $newDate = date("H:i", strtotime($originalDate)); //mengubah tangga
+                $newDate = date("H:i", strtotime($originalDate) + 60 * 60 * 7); //mengubah tanggal
                 array_push($array_tanggal, $newDate);
 
                 $field2[] = $responses['field2'];
@@ -332,7 +332,7 @@ class AmbilController extends Controller
             $field4 = array();
             foreach ($response['feeds'] as $responses) {
                 $originalDate = $responses['created_at'];
-                $newDate = date("H:i", strtotime($originalDate));
+                $newDate = date("H:i", strtotime($originalDate) + 60 * 60 * 7); //mengubah tanggal
                 //$array_waktu = DateTime::createFromFormat($responses['created_at']);
                 array_push($array_tanggal, $newDate);
                 $field4[] = $responses['field4'];
