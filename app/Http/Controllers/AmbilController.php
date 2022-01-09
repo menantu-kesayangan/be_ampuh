@@ -47,7 +47,7 @@ class AmbilController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
+            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?results=7&key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+07:00",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_TIMEOUT => 3000,
@@ -71,7 +71,7 @@ class AmbilController extends Controller
             $field1 = array();
             foreach ($response['feeds'] as $responses) {
                 $originalDate = $responses['created_at']; //mengambil data tanggal dari creted_at
-                $newDate = date("H:i", strtotime($originalDate)); //mengubah tangga
+                $newDate = date("H:i", strtotime($originalDate) + 60 * 60 * 7); //mengubah tanggal
                 array_push($array_tanggal, $newDate);
 
                 $field1[] = $responses['field1'];
@@ -92,13 +92,13 @@ class AmbilController extends Controller
         return $data;
     }
 
-    public function saturasi() //deklarasi function suhu (get suhu max, min, avg, grafik)
+    public function saturasi() //deklarasi function saturasi (get saturasu max, min, avg, grafik)
     {
         $currentDate = strval(gmdate("Y-m-d"));
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
+            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?results=7&key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_TIMEOUT => 3000,
@@ -122,7 +122,7 @@ class AmbilController extends Controller
             $field2 = array();
             foreach ($response['feeds'] as $responses) {
                 $originalDate = $responses['created_at']; //mengambil data tanggal dari creted_at
-                $newDate = date("H:i", strtotime($originalDate)); //mengubah tangga
+                $newDate = date("H:i", strtotime($originalDate) + 60 * 60 * 7); //mengubah tanggal
                 array_push($array_tanggal, $newDate);
 
                 $field2[] = $responses['field2'];
@@ -304,11 +304,13 @@ class AmbilController extends Controller
     {
 
         $currentDate = strval(gmdate("Y-m-d"));
+        $sevendaysago = date('Y-m-d', strtotime('-7 days'));
+
 
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
+            CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?sum=daily&key=AB2MDITZZC8AK4Z9&start=" . $sevendaysago . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_TIMEOUT => 30000,
@@ -332,10 +334,15 @@ class AmbilController extends Controller
             $field4 = array();
             foreach ($response['feeds'] as $responses) {
                 $originalDate = $responses['created_at'];
-                $newDate = date("H:i", strtotime($originalDate));
+                $newDate = date("j M", strtotime($originalDate)); //mengubah tanggal
                 //$array_waktu = DateTime::createFromFormat($responses['created_at']);
                 array_push($array_tanggal, $newDate);
-                $field4[] = $responses['field4'];
+
+                if ($responses['field4'] == null) {
+                    $field4[] = 0;
+                } else {
+                    $field4[] = $responses['field4'];
+                }
             }
         }
 
