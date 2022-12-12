@@ -43,7 +43,8 @@ class AmbilController extends Controller
 
     public function suhu() //deklarasi function suhu (get suhu max, min, avg, grafik)
     {
-        $currentDate = strval(gmdate("Y-m-d"));
+        // $currentDate = strval(gmdate("Y-m-d"));
+        $currentDate = "2022-01-25";
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -94,7 +95,7 @@ class AmbilController extends Controller
 
     public function saturasi() //deklarasi function saturasi (get saturasu max, min, avg, grafik)
     {
-        $currentDate = strval(gmdate("Y-m-d"));
+        $currentDate = "2022-01-25";
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -146,7 +147,7 @@ class AmbilController extends Controller
     public function jmlhpengunjunghariini() //deklarasi function menghitung pengunjung hari ini
     {
         $curl = curl_init();
-        $currentDate = strval(gmdate("Y-m-d"));
+        $currentDate = "2022-01-25";
 
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/fields/4.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
@@ -185,7 +186,7 @@ class AmbilController extends Controller
     public function jmlhpengunjungmingguini() //deklarasi function menghitung pengunjung minggu ini
     {
         $curl = curl_init();
-        $currentDate = strval(gmdate("Y-m-d"));
+        $currentDate = "2022-01-25";
         $sevendaysago = date('Y-m-d', strtotime('-7 days'));
 
         curl_setopt_array($curl, array(
@@ -225,7 +226,7 @@ class AmbilController extends Controller
     public function jmlhpengunjungbulanini() //deklarasi function menghitung jumlah pengunjung bulan ini
     {
         $curl = curl_init();
-        $currentDate = strval(gmdate("Y-m-d"));
+        $currentDate = "2022-01-25";
         $thirtydaysago = date('Y-m-d', strtotime('-30 days'));
 
         curl_setopt_array($curl, array(
@@ -264,7 +265,7 @@ class AmbilController extends Controller
     public function cairan() //deklasi function cairan
     {
         $curl = curl_init();
-        $currentDate = strval(gmdate("Y-m-d"));
+        $currentDate = "2022-01-25";
 
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.thingspeak.com/channels/1567602/feeds.json?key=AB2MDITZZC8AK4Z9&start=" . $currentDate . "T00:00+02:00&end=" . $currentDate . "T23:59+02:00&timezone=GMT+00:00",
@@ -303,7 +304,7 @@ class AmbilController extends Controller
     public function grafikpengunjung() //deklarasi index pengunjung(menampilkan seluruh data pengunjung)
     {
 
-        $currentDate = strval(gmdate("Y-m-d"));
+        $currentDate = "2022-01-25";
         $sevendaysago = date('Y-m-d', strtotime('-7 days'));
 
 
